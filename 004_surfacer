@@ -1,0 +1,59 @@
+# SLC family receptors in BRCA analysis
+# This code creates Fig. 5A from the SURFACER Manuscript
+setwd("F:/projects/Breast/")
+library(stringr)
+library(matrixStats)
+library(corto)
+library(ggforce)
+library(edgeR)
+library(DESeq2)
+library(xlsx)
+#source("F:/Archive/vst.R")
+# surfaceR approach on TCGA ovarian cancer
+load("F:/Projects/Pan-Cancer/data/surfacer_2020.rda")
+#load("data/000_tcga_BRCA-edgeres.rda")
+#load("results/000_tcga_BRCA-mra.rda")
+#load("000_subtypes_DE.rda")
+load("F:/Projects/Breast/000_PAM50subtypes_DE.rda")
+load("F:/Projects/Breast/results/001_tcga_LumA-mra.rda")
+# single-tissue surfaceR
+common<-intersect(rownames(results),surfacer)
+surfmk<-results[common,]
+sigup<-surfmk[surfmk$logFC.LumA.normal>1&surfmk$adjPValue<=1e-50,]
+sigup<-sigup[order(sigup$logFC.LumA.normal,decreasing = T),]
+mraup<-names(which(mr$nes>15&mr$pvalue<=1e-50))
+surf_mark<-intersect(rownames(sigup),mraup)
+sigdn<-surfmk[surfmk$logFC.LumA.normal< -1&surfmk$adjPValue<=1e-50,]
+mradn<-names(which(mr$nes< -15&mr$pvalue<=1e-50))
+downmark<-intersect(rownames(sigdn),mradn)
+
+slcs<-grep("SLC",c(surf_mark,downmark),value=TRUE)
+slcsup<-grep("SLC",surf_mark,value=TRUE)
+slcsdn<-grep("SLC",downmark,value=TRUE)
+#### DEGs plots
+# Volcano Plots
+library(EnhancedVolcano)
+library(airway)
+library(magrittr)
+png("plots/008_slcs.png", w=2500,h=2500, res=300)
+EnhancedVolcano(results, subtitle = "",
+                lab = rownames(results),
+                selectLab = slcs,
+                x = 'logFC.LumA.normal',
+                y = 'adjPValue',
+                xlim = c(-10, 10),
+                ylim = c(0,300),
+                title = 'LumA vs. CTRL',
+                pCutoff = 0.01, #0.05 cutoff
+                FCcutoff = 1, # 2-fold change
+                labFace = "bold",
+                labSize = 4,
+                col = c('black', 'ligthpink', 'lightblue', 'salmon'),
+                colAlpha = 4/5,
+                legendLabSize = 14,
+                legendIconSize = 4.0,
+                drawConnectors = TRUE,
+                widthConnectors = 0.3,colConnectors = 'gray18',
+                caption = paste0('Upregulated SLCs= ',length(slcsup),"\n","Downregulated SLCs= ",length(slcsdn)))+#coord_flip()+.
+  theme(plot.title = element_text(hjust = 0.5))
+dev.off()
