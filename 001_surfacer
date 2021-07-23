@@ -119,7 +119,7 @@ downmark<-intersect(rownames(sigdn),mradn)
 # Plot
 source("F:/Archive/textplot3.R")
 marks<-surf_mark[1:10]
-# plot archetype MD plot
+# plot archetype MD plot, Fig. 1A in the SURFACER Manuscript
 results<-results[order(results$logFC,decreasing = T),]
 x<-setNames(results$logCPM,rownames(results))
 y<-setNames(results$logFC,rownames(results))
@@ -209,6 +209,7 @@ GoI<-c("ERBB2","FOLR1","CD274","SLC9A1","ABCA12")
 match(GoI,rows_labs) #537  602  263 1800    3
 rows_labs2<-str_replace(rows_labs,".*[A-Z0-9]", " ")
 rows_labs2[c(537,602,263,1800,3)]<-GoI
+# This prints Fig. 3A of the SURFACER Manuscript
 png("plots/000_heatmap_clustering_nolabs.png",w=4000,h=3000,res=300)
 heatmap.3(toplot,KeyValueName = "NES",hcc=res.hc,col=colfun,ColSideColors = my_patients,RowSideColors = rowside,labRow = rows_labs2, labCol = FALSE)
 dev.off()
@@ -237,6 +238,8 @@ sfit<-survfit(survival~Subtype)
 summary(sfit)
 #plot(sfit)
 palette<-c("plum2","tomato","cyan","seagreen3","darkkhaki")
+
+# This prints Fig. 6A for the SURFACER Manuscript
 png("plots/000_survival_surfaceR_subtypes.png",w=3000,h=4000,res=350)
 ggsurvplot(sfit, data=survival,palette=palette,
            conf.int=FALSE, pval=TRUE, risk.table=TRUE, 
