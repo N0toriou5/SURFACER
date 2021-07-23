@@ -1,2 +1,2 @@
 # surfaceR
-ML cell-surface pattern recognition analysis
+A Network Activity-based cell surface markers predictor
