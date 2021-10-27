@@ -54,6 +54,9 @@ cbind(freq=table(dataset$subtype), percentage=percentage)
 # Lum3            164   22.49657
 # Mixed           116   15.91221
 
+# summarize the class distribution
+percentage <- prop.table(table(validation$subtype)) * 100
+cbind(freq=table(validation$subtype), percentage=percentage)
 
 # Run algorithms using 10-fold cross validation
 control <- trainControl(method="cv", number=10)
@@ -125,6 +128,7 @@ fit.snn <- caret::train(subtype~., data=dataset, method="snn", metric=metric, tr
 results <- resamples(list(lda=fit.lda, bgm=fit.bglm, knn=fit.knn, svm=fit.svm, rf=fit.rf,mlp=fit.mlp,pam=fit.pam,
                           gbm=fit.gbm, protoclass=fit.protoclass, pcan=fit.pcan, snn=fit.snn))
 summary(results)
+save(results,file = "results/001_ML_performance.rda")
 # compare accuracy of models
 png("plots/000_validation_models.png",w=2000,h=1500, res=300)
 dotplot(results)
