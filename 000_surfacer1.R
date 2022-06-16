@@ -7,7 +7,7 @@ library(edgeR)
 library(DESeq2)
 library(xlsx)
 #source("F:/Archive/vst.R")
-# surfaceR approach on TCGA ovarian cancer
+# surfaceR approach on TCGA BRCA cancer
 load("F:/Projects/Pan-Cancer/data/surfacer_2020.rda")
 
 # Load normal breast tissue counts
