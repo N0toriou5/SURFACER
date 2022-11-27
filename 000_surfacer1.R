@@ -10,7 +10,7 @@ library(xlsx)
 # surfaceR approach on TCGA BRCA cancer
 load("F:/Projects/Pan-Cancer/data/surfacer_2020.rda")
 
-# Load normal breast tissue counts
+# Load normal breast tissue counts (we used count matrices from https://doi.org/10.1038/sdata.2018.61)
 # Normal tissue counts
 gtex_counts <- read.delim("F:/Projects/Pan-Cancer/data/breast-rsem-count-gtex.txt.gz",sep="\t",header=TRUE,as.is=TRUE)
 graw <- sapply(gtex_counts[,3:ncol(gtex_counts)],as.integer)
